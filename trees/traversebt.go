@@ -36,6 +36,8 @@ func main() {
 	fmt.Println()
 	print(os.Stdout, t.root, 0, 'M')
 	fmt.Println(maxDepth(t.root))
+	fmt.Println("Level order")
+	fmt.Println(levelOrder(t.root))
 }
 
 func print(w io.Writer, n *Node, ns int, ch rune) {
@@ -48,6 +50,31 @@ func print(w io.Writer, n *Node, ns int, ch rune) {
 	fmt.Fprintf(w, "%c:%v\n", ch, n.data)
 	print(w, n.left, ns+2, 'L')
 	print(w, n.right, ns+2, 'R')
+}
+
+func levelOrder(t *Node) [][]int {
+	result := [][]int{}
+	if t == nil {
+		return result
+	}
+	q := []*Node{t}
+	for len(q) > 0 {
+		length := len(q)
+		level := []int{}
+		for i := 0; i < length; i++ {
+			node := q[0]
+			q = q[1:]
+			level = append(level, node.data)
+			if node.left != nil {
+				q = append(q, node.left)
+			}
+			if node.right != nil {
+				q = append(q, node.right)
+			}
+		}
+		result = append(result, level)
+	}
+	return result
 }
 
 func (t *BTree) insert(data int) *BTree {
